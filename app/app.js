@@ -7,24 +7,33 @@ import { getFirestore, serverTimestamp, doc, getDoc, setDoc } from "https://www.
 import { getFunctions } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-functions.js";
 
 const app = initializeApp(FIREBASE_CONFIG);
-try { getAnalytics(app); } catch(e) { /* optional analytics */ }
+
+try { 
+  getAnalytics(app); 
+} catch (e) { 
+  /* optional analytics may throw in non-https or local env */ 
+}
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 const functions = getFunctions(app);
 
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerText = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
 window.App = {
   auth,
   db,
   functions,
-  toasts: (msg) => {
-    const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
-  }
+  toasts: showToast
 };
 
-export async function ensureUserDoc(user){
+export async function ensureUserDoc(user) {
   const uRef = doc(db, 'users', user.uid);
   const snap = await getDoc(uRef);
   if (!snap.exists()) {

@@ -1,5 +1,5 @@
 // employee.js — frontend logic (modular imports)
-import { db, auth, functions } from './app.js';
+import { functions, db, auth } from './app.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {
   collection, addDoc, query, where, orderBy, limit, onSnapshot,
@@ -99,7 +99,6 @@ submitShift.addEventListener('click', async () => {
     clockInBtn.disabled = false;
     computeTotals(auth.currentUser.uid);
   } catch(e) {
-    // Show friendly error and log full object to console for debugging
     window.App.toasts(e.message || 'Finalize failed');
     console.error('Finalize error', e);
   }
