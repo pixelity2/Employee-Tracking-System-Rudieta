@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Rudieta · Employee</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">RE</div>
+        <div class="title"><h1>Employee Dashboard</h1><p>Clock in, log shift, view earnings</p></div>
+      </div>
+      <div>
+        <button class="small-btn" id="signout">Sign out</button>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="avatar" id="avatar">U</div>
+        <div>
+          <div id="uname">Guest</div>
+          <small id="uemail">—</small>
+        </div>
+      </div>
+
+      <div class="kpi card">
+        <div class="row"><div>Current Open Shift</div><div class="badge" id="openBadge">No</div></div>
+        <div class="row"><div>Total (30d)</div><div class="big" id="total30">0.00</div></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="controls">
+        <button id="clockIn" class="primary-btn">Clock In</button>
+        <button id="clockOut" class="ghost-btn" disabled>Clock Out</button>
+        <div style="margin-left:auto"><small id="shiftState">Idle</small></div>
+      </div>
+
+      <div id="shiftPrompt" class="card" style="display:none">
+        <h4>End of shift — quick log</h4>
+        <label>What did you do?</label>
+        <textarea id="notes" placeholder="Describe work done"></textarea>
+        <label>Links (comma separated)</label>
+        <input id="links" placeholder="https://..., ticket#123" />
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button id="submitShift" class="primary-btn">Submit Shift</button>
+          <button id="cancelClose" class="ghost-btn">Cancel</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4>Recent shifts</h4>
+        <div class="shift-list" id="shifts"></div>
+      </div>
+    </main>
+
+    <aside class="summary">
+      <h4>My Earnings</h4>
+      <div class="line"><div>Today</div><div id="earnToday">0.00</div></div>
+      <div class="line"><div>Week</div><div id="earnWeek">0.00</div></div>
+      <div class="line"><div>30 days</div><div class="total" id="earn30">0.00</div></div>
+    </aside>
+  </div>
+
+  <script type="module" src="./employee.js"></script>
+</body>
+</html>

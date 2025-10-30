@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Rudieta · Sign in</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <div class="container" style="grid-template-columns:1fr">
+    <div class="header" style="grid-column:1/-1">
+      <div class="brand">
+        <div class="logo">RE</div>
+        <div class="title"><h1>Rudieta Shift Tracker</h1><p>Clock in, log work, and see earnings</p></div>
+      </div>
+    </div>
+
+    <div class="main" style="max-width:520px;margin:auto">
+      <h3 style="margin-top:0">Sign in</h3>
+      <div class="card">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="you@company.com" />
+        <label>Password</label>
+        <input id="password" type="password" placeholder="••••••••" />
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="primary-btn" id="login">Sign in</button>
+          <button class="ghost-btn" id="go-employee">Employee</button>
+        </div>
+        <small>Accounts are created by admins only</small>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { signInWithEmailAndPassword, onAuthStateChanged, auth, httpsCallable, ensureUserDoc } from './app.js';
+    // The app.js module already exported helpers; import via window.App if preferred
+    const loginBtn = document.getElementById('login');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+
+    loginBtn.addEventListener('click', async () => {
+      try {
+        const res = await signInWithEmailAndPassword(window.App.auth, email.value, password.value);
+        // ensure user doc exists
+        await ensureUserDoc(res.user);
+        // simple role redirect: fetch user doc
+        const db = window.App.db;
+        const { getDoc, doc } = await import('https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js');
+        const u = await getDoc(doc(db, 'users', res.user.uid));
+        const role = u.exists() ? u.data().role : 'employee';
+        if (role === 'admin') location.href = './admin.html';
+        else location.href = './employee.html';
+      } catch(e) {
+        window.App.toasts(e.message || 'Sign in failed');
+      }
+    });
+
+    document.getElementById('go-employee').addEventListener('click', ()=> location.href='./employee.html');
+  </script>
+</body>
+</html>

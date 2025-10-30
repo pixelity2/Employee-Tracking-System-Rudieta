@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Rudieta · Admin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">RE</div>
+        <div class="title"><h1>Admin Dashboard</h1><p>Manage employees, boosts, and payroll</p></div>
+      </div>
+      <div>
+        <button class="small-btn" id="signout">Sign out</button>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="section-title">Create Employee</div>
+      <div class="card">
+        <label>Email</label><input id="empEmail" placeholder="employee@company.com" />
+        <label>Display name</label><input id="empName" placeholder="Full Name" />
+        <label>Base rate (hour)</label><input id="empRate" type="number" placeholder="5.00" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="primary-btn" id="createEmp">Create</button>
+        </div>
+        <small>New employee accounts are created in Auth and a user doc</small>
+        <div id="createStatus"></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="section-title">Quick actions</div>
+        <button class="small-btn" id="exportCsv">Export payroll CSV</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="card">
+        <h4>Recent shifts (closed)</h4>
+        <div id="recentShifts" class="shift-list"></div>
+      </div>
+    </main>
+
+    <aside class="summary">
+      <h4>Totals</h4>
+      <div class="line"><div>Last 30 days</div><div class="total" id="tot30">0.00</div></div>
+      <div style="margin-top:12px"><small>Click a shift to edit earnings or view details</small></div>
+    </aside>
+  </div>
+
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>

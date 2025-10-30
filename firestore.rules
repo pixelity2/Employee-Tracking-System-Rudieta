@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isAdmin(uid) { return exists(/databases/$(database)/documents/admins/$(uid)); }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin(request.auth.uid));
+    }
+
+    match /shifts/{shiftId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin(request.auth.uid));
+      allow update: if isSignedIn() && (
+        // employee can update only their open shift limited fields
+        (resource.data.userId == request.auth.uid
+         && resource.data.status == "open"
+         && request.resource.data.keys().hasOnly(["clockOut","notes","links","status","closedAt"]))
+        || isAdmin(request.auth.uid)
+      );
+      allow delete: if isAdmin(request.auth.uid);
+    }
+
+    match /boosts/{b} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isAdmin(request.auth.uid);
+    }
+
+    match /admins/{a} {
+      allow read: if isSignedIn() && isAdmin(request.auth.uid);
+      allow write: if isSignedIn() && isAdmin(request.auth.uid);
+    }
+  }
+}
